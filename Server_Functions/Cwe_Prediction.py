@@ -53,7 +53,7 @@ class Cwe_Prediction():
     # data base
     my_client = pymongo.MongoClient('localhost', 27017)
     Viradb = my_client.Viradb2
-   #
+    #
     Score = Viradb.scores
     Docs_Content = Viradb.docs_contents
     CWE = Viradb.cwes
@@ -92,9 +92,10 @@ class Cwe_Prediction():
             cwe_id_name[str(cwe['_id'])] = cweid
         # Discripton vis CWE
         Model_data = []
-        for obj in Docs_Content.find({'cwe_id': {'$ne': None}}):
+        for obj in Docs_Content.find({'cwe_id': {'$ne': None}}) :
             dis = obj['discriptons']
             dis = TextPreprocessing(dis)
+
             try:
                 if len(obj['cwe_id']) >= 1:
                     for cwe in obj['cwe_id']:
@@ -112,8 +113,8 @@ class Cwe_Prediction():
             sgd = pickle.load(open(sav_files[0], 'rb'))
 
     def predict_cwe(self, Discripton):
-     Discripton = TextPreprocessing(Discripton)
-     return self.sgd.predict([Discripton])
+        Discripton = TextPreprocessing(Discripton)
+        return self.sgd.predict([Discripton])
 
     def update_None_CWE(self, chekdays=7):
         end = datetime.datetime.now()
@@ -124,5 +125,3 @@ class Cwe_Prediction():
             self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prdcwe}})
 
 
-
-x = Cwe_Prediction.update_None_CWE()

@@ -1,5 +1,5 @@
 import datetime
-import nvdapi
+from . import Nvdapi
 import re
 import Viradb
 import requests
@@ -98,7 +98,7 @@ class NvdCrawler():
             chekdays = 120
         end = datetime.datetime.now()
         start = end - datetime.timedelta(days=chekdays)
-        objects = nvdapi.searchCVE(modStartDate=start, modEndDate=end, key=self.keys)
+        objects = Nvdapi.searchCVE(modStartDate=start, modEndDate=end, key=self.keys)
         for obj in objects:
             cve_id = obj.id
             cve_sh = self.Docs_Content.find_one({'cve_id': cve_id})
@@ -231,7 +231,7 @@ class NvdCrawler():
 
     # to update al table lof one cve
     def update_one(self, cve_id, description_farsi=None):
-        obj = nvdapi.getCVE(cve_id, True, self.keys)
+        obj = Nvdapi.getCVE(cve_id, True, self.keys)
         cve_sh = self.Docs_Content.find_one({'cve_id': cve_id})
         if cve_sh != None:
             modified_date = datetime.datetime.now()

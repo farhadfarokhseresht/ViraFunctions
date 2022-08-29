@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import Viradb
-import nvdapi
+from . import Nvdapi
 
 
 class UbuntuCrawler():
@@ -57,7 +57,7 @@ class UbuntuCrawler():
                 print('err in page : {} !'.format(url))
 
             try:
-                NVDobj = nvdapi.getCVE(cve_id)
+                NVDobj = Nvdapi.getCVE(cve_id)
                 description_data = NVDobj.cve.description.description_data[0]
                 discriptons = description_data.value
                 cve_url = cve_url | {'nvd': "https://nvd.nist.gov/vuln/detail/" + cve_id}

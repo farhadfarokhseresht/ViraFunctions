@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-from . import Viradb
-import nvdapi
+import Viradb
+from . import Nvdapi
 import re
 import dateutil.parser
-import NvdCrawler
+from . import NvdCrawler
 
 
 class PostgresqlCrawler():
@@ -35,7 +35,7 @@ class PostgresqlCrawler():
             cve_sh = self.Docs_Content.find_one({'cve_id': cve_id})
             if cve_sh == None:
                 try:
-                    obj = nvdapi.getCVE(cve_id)
+                    obj = Nvdapi.getCVE(cve_id)
                 except:
                     continue
                 published_date = obj.publishedDate

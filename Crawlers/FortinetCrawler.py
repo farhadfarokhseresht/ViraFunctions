@@ -1,9 +1,9 @@
 import datetime
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, date
+from datetime import datetime
 import Viradb
-import NvdCrawler
+from . import NvdCrawler
 
 
 class FortinetCrawler():

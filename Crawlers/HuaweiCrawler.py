@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from . import Viradb
-import NvdCrawler
+import Viradb
+from . import NvdCrawler
 from datetime import datetime
 
 
