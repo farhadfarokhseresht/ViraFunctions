@@ -8,7 +8,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 import pymongo
 import datetime
-import Viradb
 
 nltk.download("punkt")
 nltk.download('stopwords')
@@ -303,8 +302,5 @@ class BrandPredictions():
         for item in none_brands:
             prdbrand = self.predictVndors(item['discriptons'])
             self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prdbrand}})
-
-x = BrandPredictions()
-x.update_None_Brands()
 
 

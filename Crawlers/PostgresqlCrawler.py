@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import Viradb
-from . import Nvdapi
+from . import Nvdapi, Viradb
 import re
 import dateutil.parser
 from . import NvdCrawler

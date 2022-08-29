@@ -1,8 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import Viradb
-from . import Nvdapi
+from . import Nvdapi, Viradb
 
 
 class UbuntuCrawler():
