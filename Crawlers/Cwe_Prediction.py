@@ -124,6 +124,6 @@ class Cwe_Prediction():
             if prd_cwe_id == None:
                 prd_cwe_id = prdcwe
             else:
-                prd_cwe_id = prd_cwe_id['_id']
+                prd_cwe_id = prd_cwe_id['cwe_title_latin']
             self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prd_cwe_id}})
             print('system_CWE_Prediction for CVE ID :',item['cve_id'])

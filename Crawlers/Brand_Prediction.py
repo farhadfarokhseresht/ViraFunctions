@@ -300,10 +300,10 @@ class BrandPredictions():
         none_brands = self.Docs_Content.find({'$and': [{'product_id': None}, {'modified_date': {'$gte': start}}]})
         for item in none_brands:
             prdbrand = self.predictVndors(item['discriptons'])
-            prd_brand_id = self.Brand.find_one({'brand_id': prdbrand})
-            if prd_brand_id == None :
-                prd_brand_id = prdbrand
-            else:
-                prd_brand_id = prd_brand_id['_id']
-            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prd_brand_id}})
+            # prd_brand_id = self.Brand.find_one({'brand_id': prdbrand})
+            # if prd_brand_id == None :
+            #     prd_brand_id = prdbrand
+            # else:
+            #     prd_brand_id = prd_brand_id['_id']
+            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prdbrand}})
             print('system_Brand_Prediction for CVE ID :', item['cve_id'])
