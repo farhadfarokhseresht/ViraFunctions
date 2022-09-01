@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 import pymongo
 import datetime
+import Viradb
 
 nltk.download("punkt")
 nltk.download('stopwords')
@@ -100,15 +101,13 @@ def get_all_keyword(data, vocab):
 
 # Predictions Function
 class BrandPredictions():
-    # data base
-    my_client = pymongo.MongoClient('localhost', 27017)
-    Viradb = my_client.Viradb2
-   #
-    Score = Viradb.scores
-    Docs_Content = Viradb.docs_contents
-    CWE = Viradb.cwes
-    Brand = Viradb.brands
-    Product = Viradb.products
+    db = Viradb.Viradb()
+    #
+    Score = db.Score
+    Docs_Content = db.Docs_Content
+    CWE = db.CWE
+    Brand = db.Brand
+    Product = db.Product
 
     doc_objs = Docs_Content.find({'product_id': {'$ne': None}})
     df = []
@@ -301,6 +300,10 @@ class BrandPredictions():
         none_brands = self.Docs_Content.find({'$and': [{'product_id': None}, {'modified_date': {'$gte': start}}]})
         for item in none_brands:
             prdbrand = self.predictVndors(item['discriptons'])
-            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prdbrand}})
-
-
+            prd_brand_id = self.Brand.find_one({'brand_id': prdbrand})
+            if prd_brand_id == None :
+                prd_brand_id = prdbrand
+            else:
+                prd_brand_id = prd_brand_id['_id']
+            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prd_brand_id}})
+            print('system_Brand_Prediction for CVE ID :', item['cve_id'])

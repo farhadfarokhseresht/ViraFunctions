@@ -1,5 +1,5 @@
 import datetime
-from . import Nvdapi, Viradb
+import Nvdapi, Viradb
 import re
 import requests
 from bs4 import BeautifulSoup

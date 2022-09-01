@@ -7,14 +7,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 import pymongo
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score
 import pickle
 import datetime
 import os
 import glob
+import Viradb
 
 # TextPreprocessing
 porter_stemmer = PorterStemmer()
@@ -51,14 +50,13 @@ def TextPreprocessing(text, method=False, Notokenize=True):
 
 class Cwe_Prediction():
     # data base
-    my_client = pymongo.MongoClient('localhost', 27017)
-    Viradb = my_client.Viradb2
-    #
-    Score = Viradb.scores
-    Docs_Content = Viradb.docs_contents
-    CWE = Viradb.cwes
-    Brand = Viradb.brands
-    Product = Viradb.products
+    db = Viradb.Viradb()
+    Score = db.Score
+    Docs_Content = db.Docs_Content
+    CWE = db.CWE
+    Brand = db.Brand
+    Product = db.Product
+
     now = datetime.datetime.now()
 
     sgd = Pipeline([('vect', CountVectorizer()),
@@ -122,6 +120,10 @@ class Cwe_Prediction():
         none_brands = self.Docs_Content.find({'$and': [{'cwe_id': None}, {'modified_date': {'$gte': start}}]})
         for item in none_brands:
             prdcwe = self.predict_cwe(item['discriptons'])[0]
-            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prdcwe}})
-
-
+            prd_cwe_id = self.CWE.find_one({'cwe_id': prdcwe})
+            if prd_cwe_id == None:
+                prd_cwe_id = prdcwe
+            else:
+                prd_cwe_id = prd_cwe_id['_id']
+            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prd_cwe_id}})
+            print('system_CWE_Prediction for CVE ID :',item['cve_id'])

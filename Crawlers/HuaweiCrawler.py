@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from . import NvdCrawler, Viradb
+import NvdCrawler, Viradb
 from datetime import datetime
 
 
@@ -28,7 +28,8 @@ class HuaweiCrawler():
 
     def getcve(self):
         now = datetime.now()
-        url = 'https://consumer.huawei.com/en/support/bulletin/{}/{}/'.format(now.year,now.month)
+        # url = 'https://consumer.huawei.com/en/support/bulletin/{}/{}/'.format(now.year,now.month)
+        url = 'https://consumer.huawei.com/en/support/bulletin/2022/8/'#.format(now.year,now.month)
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         page = requests.get(url, headers=headers, stream=True)
@@ -117,3 +118,5 @@ class HuaweiCrawler():
                     pass
                     # if not in db
                     # NO INFORMATION
+        else:
+            print('HuaweiCrawler cant find any cve')

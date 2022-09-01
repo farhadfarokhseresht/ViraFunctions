@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-from . import Nvdapi, Viradb
+import Nvdapi, Viradb
 import re
 import dateutil.parser
-from . import NvdCrawler
+import NvdCrawler
 
 
 class PostgresqlCrawler():
@@ -121,7 +121,6 @@ class PostgresqlCrawler():
                     cveproductlist = poductid
                 else:
                     cveproductlist.append(poductid)
-
                 cveproductlist = list(set(cveproductlist))
 
                 # Insert  to  CWE

@@ -2,7 +2,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from . import NvdCrawler, Viradb
+import NvdCrawler, Viradb
 
 
 class FortinetCrawler():

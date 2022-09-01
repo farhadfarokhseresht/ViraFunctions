@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-from . import NvdCrawler, Viradb
+import NvdCrawler, Viradb
 import time
 from datetime import datetime
 
@@ -51,7 +51,7 @@ class F5Crawler():
             self.popup(f5_driver)
         except:
             print('can not get F5 url')
-        time.sleep(6)
+        time.sleep(10)
         try:
             f5_driver.find_element(by=By.XPATH, value='/html/body/div[6]/div/div[2]').click()
         except:
@@ -69,7 +69,7 @@ class F5Crawler():
                 except:
                     pass
         # go to cve page
-        for cvelink in cvelinks[0:3]:
+        for cvelink in cvelinks:
             f5_driver.get(cvelink)
             try:
                 self.popup(f5_driver)
