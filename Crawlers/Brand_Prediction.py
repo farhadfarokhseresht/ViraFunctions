@@ -115,7 +115,7 @@ class BrandPredictions():
         discriptons = obj['discriptons']
         brands = []
         try:
-            if (len(obj['product_id']) > 0) and (isinstance(obj['product_id'], list)) :
+            if (len(obj['product_id']) > 0) and (isinstance(obj['product_id'], list)):
                 for prods in obj['product_id']:
                     try:
                         brandid = (Product.find_one({'_id': prods}))['brand_id']
@@ -213,7 +213,21 @@ class BrandPredictions():
                 finall_Decision = step3Decision
             if finall_Decision == None:
                 finall_Decision = step3Decision
-        return finall_Decision
+
+        # check for product
+        predict_product = []
+        try:
+            for product_item_name in list(brand_product[finall_Decision]):
+                for token in discriptons_tokens:
+                    if token == product_item_name:
+                        predict_product.append(product_item_name)
+            if len(predict_product) == 0 :
+                predict_product = None
+        except:
+            predict_product = None
+
+        return [finall_Decision,predict_product]
+
 
     def show_ignores(self, ignore):
         # # show discriptons can not predict correct
@@ -294,16 +308,19 @@ class BrandPredictions():
                 print('-------------Decision : {} -------------------------------------------------'.format(
                     finall_Decision))
 
+
     def update_None_Brands(self, chekdays=7):
         end = datetime.datetime.now()
         start = end - datetime.timedelta(days=chekdays)
         none_brands = self.Docs_Content.find({'$and': [{'product_id': None}, {'modified_date': {'$gte': start}}]})
         for item in none_brands:
-            prdbrand = self.predictVndors(item['discriptons'])
+            prdbrand,prdproduct = self.predictVndors(item['discriptons'])
             # prd_brand_id = self.Brand.find_one({'brand_id': prdbrand})
             # if prd_brand_id == None :
             #     prd_brand_id = prdbrand
             # else:
             #     prd_brand_id = prd_brand_id['_id']
-            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prdbrand}})
+            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Brand_Prediction': prdbrand,
+                                                                         'system_Product_Prediction': prdproduct
+                                                                         }})
             print('system_Brand_Prediction for CVE ID :', item['cve_id'])
