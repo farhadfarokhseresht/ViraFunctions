@@ -1,3 +1,4 @@
+from functools import cache
 import nltk
 import string
 from nltk.tokenize import word_tokenize
@@ -115,15 +116,22 @@ class Cwe_Prediction():
         return self.sgd.predict([Discripton])
 
     def update_None_CWE(self, chekdays=7):
-        end = datetime.datetime.now()
-        start = end - datetime.timedelta(days=chekdays)
-        none_brands = self.Docs_Content.find({'$and': [{'cwe_id': None}, {'modified_date': {'$gte': start}}]})
-        for item in none_brands:
-            prdcwe = self.predict_cwe(item['discriptons'])[0]
-            prd_cwe_id = self.CWE.find_one({'cwe_id': prdcwe})
-            if prd_cwe_id == None:
-                prd_cwe_id = prdcwe
-            else:
-                prd_cwe_id = prd_cwe_id['_id']
-            self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prd_cwe_id}})
-            print('system_CWE_Prediction for CVE ID :',item['cve_id'])
+        # try:
+            end = datetime.datetime.now()
+            start = end - datetime.timedelta(days=chekdays)
+            none_brands = self.Docs_Content.find({'$and': [{'cwe_id': None, 'system_Cwe_Prediction':''}, {'modified_date': {'$gte': start}}]})
+            print(none_brands)
+            for item in none_brands:
+                prdcwe = self.predict_cwe(item['discriptons'])[0]
+                prd_cwe_id = self.CWE.find_one({'cwe_id': prdcwe})
+                print(prd_cwe_id)
+                if prd_cwe_id == None:
+                    prd_cwe_id = prdcwe
+                else:
+                    prd_cwe_id = prd_cwe_id['cwe_title_farsi']
+                self.Docs_Content.update_one({'_id': item['_id']}, {"$set": {'system_Cwe_Prediction': prd_cwe_id}})
+                print('system_CWE_Prediction for CVE ID :',item['cve_id'])
+        # except:
+            # print("jjj")
+x=Cwe_Prediction()
+x.update_None_CWE(120)

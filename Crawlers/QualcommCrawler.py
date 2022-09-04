@@ -1,11 +1,10 @@
 import datetime
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import time
-from Crawlers import Viradb
+import Viradb
 
 
 class QualcommCrawler():
@@ -322,3 +321,5 @@ class QualcommCrawler():
                     }
                     self.Score.insert_one(Insertdata)
         print('QualcommCrawler End successfuly')
+X= QualcommCrawler()
+X.getcve()

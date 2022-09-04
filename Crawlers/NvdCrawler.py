@@ -194,7 +194,9 @@ class NvdCrawler():
                             cwe_id_list.append(postid)
                         else:
                             cwe_id_list.append(searchitem['_id'])
-
+                if not cveproductlist:
+                    cveproductlist=None
+                print(cveproductlist)
                 # Insert to Docs_Content
                 Insertdata = {
                     'year': published_date.year,
@@ -493,3 +495,5 @@ class NvdCrawler():
                 }
                 self.Score.insert_one(Insertdata)
             print('nvd get cve :', cve_id)
+x= NvdCrawler()
+x.getcve(1)
