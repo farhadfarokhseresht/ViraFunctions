@@ -182,7 +182,6 @@ class NvdCrawler():
                     if cveproductid != None and cveproductlist != None:
                         cveproductid = cveproductid['product_id']
                         cveproductlist = list(set(cveproductlist + cveproductid))
-
                 # Insert  to  CWE
                 cwe_id_list = None
                 if len(cwe_id) > 0:
@@ -198,6 +197,11 @@ class NvdCrawler():
                     cveproductlist=None
                 print(cveproductlist)
                 # Insert to Docs_Content
+                try:
+                    if len(cveproductlist) < 1:
+                        cveproductlist = None
+                except:
+                    pass
                 Insertdata = {
                     'year': published_date.year,
                     'month': published_date.month,
@@ -320,7 +324,7 @@ class NvdCrawler():
                 if cveproductid != None and cveproductlist != None:
                     cveproductid = cveproductid['product_id']
                     if cveproductid != None:
-                        cveproductlist = list(set(cveproductlist + cveproductid))
+                        cveproductlist = list(set(list(cveproductlist) + list(cveproductid)))
                     else:
                         cveproductlist = list(set(cveproductlist))
 
@@ -347,7 +351,11 @@ class NvdCrawler():
                 cwe_id_list = cweobj['cwe_id']
 
             # Update Docs_Content
-
+            try:
+                if len(cveproductlist) < 1:
+                    cveproductlist = None
+            except:
+                pass
             Updatedata = {
                 'cve_url': cve_url,
                 'modified_date': modified_date,
@@ -466,6 +474,11 @@ class NvdCrawler():
                         cwe_id_list.append(searchitem['_id'])
 
             # Insert to Docs_Content
+            try:
+                if len(cveproductlist) < 1:
+                    cveproductlist = None
+            except:
+                pass
             Insertdata = {
                 'cve_id': cve_id,
                 'year': published_date.year,

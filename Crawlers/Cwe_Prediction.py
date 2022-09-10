@@ -119,7 +119,7 @@ class Cwe_Prediction():
         # try:
             end = datetime.datetime.now()
             start = end - datetime.timedelta(days=chekdays)
-            none_brands = self.Docs_Content.find({'$and': [{'cwe_id': None, 'system_Cwe_Prediction':''}, {'modified_date': {'$gte': start}}]})
+            none_brands = self.Docs_Content.find({'$and': [{'cwe_id': None, 'system_Cwe_Prediction':None}, {'modified_date': {'$gte': start}}]})
             print(none_brands)
             for item in none_brands:
                 prdcwe = self.predict_cwe(item['discriptons'])[0]
